@@ -37,11 +37,14 @@
 # Environment Variables
 #-----------------------------
 
-set proj_root $env(PROJ_ROOT)
-set proj_ip $env(PROJ_IP)
-set proj_bd $env(PROJ_BD)
-set proj_rtl $env(PROJ_RTL)
-set fpga_dir $env(FPGA_DIR)
+set proj_home $env(PROJ_HOME)
+set proj_fpga_home $env(PROJ_FPGA_HOME)
+set proj_fpga_ip $env(PROJ_FPGA_IP)
+set proj_fpga_bd $env(PROJ_FPGA_BD)
+set proj_fpga_rtl $env(PROJ_FPGA_RTL)
+set proj_fpga_inc $env(PROJ_FPGA_INC)
+set proj_fpga_xdc $env(PROJ_FPGA_XDC)
+set fpga_impl_dir $env(PROJ_FPGA_IMPL)
 set fpga_syn_scr $env(FPGA_SYN_SCR)
 set fpga_syn_xdc $env(FPGA_SYN_XDC)
 set fpga_dcp $env(FPGA_DCP)
@@ -91,7 +94,7 @@ set run_post_route_phys_opt_directive $env(POST_ROUTE_PHYS_OPT_DIRECTIVE)
 
 set syn_dcp $fpga_dcp/$env(SYN_DCP)
 
-set work_dir $fpga_dir/$env(WORK_DIR)
+set work_dir $fpga_impl_dir/$env(WORK_DIR)
 
 #set_property board "xilinx.com:vcu118:part0:2.0" [current_project]
 
@@ -127,7 +130,7 @@ if { $load_syn_dcp == "Yes" } {
     puts "Commencing synthesis"
     
     # Synthesize
-    synth_design -top $top -include_dirs $proj_rtl -part $fpga_part_num
+    synth_design -top $top -include_dirs $proj_fpga_inc -part $fpga_part_num
     
     # Create DCP
     if { $no_dcps != "Yes" } {

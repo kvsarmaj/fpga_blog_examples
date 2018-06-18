@@ -59,13 +59,12 @@ IMPACT_OPTIONS_FILE ?= _impact.cmd
 WORK_TAG = $(shell date +%Y_%m_%d_%H_%M_%S)
 WORK_PRE = run
 WORK_DIR = $(WORK_PRE)_$(WORK_TAG)
-VIVADO_PATH = /opt/Xilinx/Vivado/2017.3/bin
+VIVADO_PATH = /opt/Xilinx/Vivado/2016.3/bin
 
 RUN_PNR = Yes
 POWER_RUN = No
 REPORT_POWER = No
-FPGA_PART_NUM = xcvu9p-flga2104-2L-e
-TOP = rap_top
+FPGA_PART_NUM = xc7a35tlcpg236-2L
 SYN_DCP = $(TOP).syn.dcp
 
 # Control report generation

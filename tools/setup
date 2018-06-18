@@ -5,11 +5,11 @@ read do_sel
 #echo $do_sel
 
 if [ $do_sel -eq 0 ]; then
-	PROJ_ROOT=$WS_ROOT/projects
+	PROJ_ROOT=$BLOG_ROOT/projects
 	DIRS=`ls -l --time-style="long-iso" $PROJ_ROOT | egrep '^d' | awk '{print $8}'`
 	echo " List of existing projects:"
 elif [ $do_sel -eq 1 ]; then
-	PROJ_ROOT=$WS_ROOT/lib
+	PROJ_ROOT=$BLOG_ROOT/lib
 	DIRS=`ls -l --time-style="long-iso" $PROJ_ROOT | egrep '^d' | awk '{print $8}'`
 	echo " List of existing library components:"
 fi
@@ -54,51 +54,56 @@ elif [ $projsel -eq 0 ]; then
 			mkdir -p $PROJ_ROOT/$projname/${tar[$i]}/include
 			mkdir -p $PROJ_ROOT/$projname/${tar[$i]}/tests
 			mkdir -p $PROJ_ROOT/$projname/${tar[$i]}/ip
+			mkdir -p $PROJ_ROOT/$projname/${tar[$i]}/constrains
 	done
 	
 	mkdir -p $PROJ_ROOT/$projname/fpga/image
+	mkdir -p $PROJ_ROOT/$projname/fpga/impl
+	mkdir -p $PROJ_ROOT/$projname/fpga/bd
+	mkdir -p $PROJ_ROOT/$projname/fpga/dcp
+	mkdir -p $PROJ_ROOT/$projname/fpga/xdc
 	
-    cp $WS_ROOT/templates/Makefile.include.template /tmp/file
+    cp $BLOG_ROOT/templates/Makefile.include.template /tmp/file
     perl -pi -e s/unit/$projname/g /tmp/file
     cp /tmp/file $PROJ_ROOT/$projname/${tar[0]}/include/Makefile
     
-    cp $WS_ROOT/templates/Makefile.rtl.template /tmp/file
+    cp $BLOG_ROOT/templates/Makefile.rtl.template /tmp/file
     perl -pi -e s/unit/$projname/g /tmp/file
     cp /tmp/file $PROJ_ROOT/$projname/${tar[0]}/rtl/Makefile
     
-    cp $WS_ROOT/templates/Makefile.tb.template /tmp/file
+    cp $BLOG_ROOT/templates/Makefile.tb.template /tmp/file
     perl -pi -e s/unit/$projname/g /tmp/file
     cp /tmp/file $PROJ_ROOT/$projname/${tar[0]}/tb/Makefile
     
-    cp $WS_ROOT/templates/Makefile.sim.template /tmp/file
+    cp $BLOG_ROOT/templates/Makefile.sim.template /tmp/file
     perl -pi -e s/unit/$projname/g /tmp/file
     cp /tmp/file $PROJ_ROOT/$projname/${tar[0]}/sim/Makefile
     
-    cp $WS_ROOT/templates/Makefile.tests.template /tmp/file
+    cp $BLOG_ROOT/templates/Makefile.tests.template /tmp/file
     perl -pi -e s/unit/$projname/g /tmp/file
     cp /tmp/file $PROJ_ROOT/$projname/${tar[0]}/tests/Makefile
     
-    cp $WS_ROOT/templates/sim.cpp.template /tmp/file
+    cp $BLOG_ROOT/templates/sim.cpp.template /tmp/file
     perl -pi -e s/unit/$projname/g /tmp/file
 	cp /tmp/file $PROJ_ROOT/$projname/${tar[0]}/sim/sim.cpp
     
-    cp $WS_ROOT/templates/unit.cpp.template /tmp/file
+    cp $BLOG_ROOT/templates/unit.cpp.template /tmp/file
     perl -pi -e s/unit/$projname/g /tmp/file
     cp /tmp/file $PROJ_ROOT/$projname/${tar[0]}/rtl/$projname.cpp
     
-    cp $WS_ROOT/templates/unit.cpp.template /tmp/file
+    cp $BLOG_ROOT/templates/unit.cpp.template /tmp/file
     perl -pi -e s/unit/$projname/g /tmp/file
     cp /tmp/file $PROJ_ROOT/$projname/${tar[0]}/rtl/$projname.cpp
     
-    cp $WS_ROOT/templates/unit_tb.cpp.template /tmp/file
+    cp $BLOG_ROOT/templates/unit_tb.cpp.template /tmp/file
     perl -pi -e s/unit/$projname/g /tmp/file
     cp /tmp/file $PROJ_ROOT/$projname/${tar[0]}/tb/$projname'_tb'.cpp
     
-    cp $WS_ROOT/templates/unit.rtl.files.template /tmp/file
+    cp $BLOG_ROOT/templates/unit.rtl.files.template /tmp/file
     perl -pi -e s/unit/$projname/g /tmp/file
     cp /tmp/file $PROJ_ROOT/$projname/${tar[0]}/rtl/$projname.rtl.files
     
-    cp $WS_ROOT/templates/unit.tb.files.template /tmp/file
+    cp $BLOG_ROOT/templates/unit.tb.files.template /tmp/file
     perl -pi -e s/unit/$projname/g /tmp/file
     cp /tmp/file $PROJ_ROOT/$projname/${tar[0]}/tb/$projname.tb.files
     
@@ -126,11 +131,15 @@ PROJ_HDL_IP=$PROJ_HDL_HOME/ip
 PROJ_FPGA_INC=$PROJ_FPGA_HOME/include
 PROJ_FPGA_SIM=$PROJ_FPGA_HOME/sim
 PROJ_FPGA_RTL=$PROJ_FPGA_HOME/rtl
+PROJ_FPGA_IP=$PROJ_FPGA_HOME/ip
+PROJ_FPGA_BD=$PROJ_FPGA_HOME/bd
 PROJ_FPGA_TB=$PROJ_FPGA_HOME/tb
 PROJ_FPGA_TESTS=$PROJ_FPGA_HOME/tests
 PROJ_FPGA_IMAGE=$PROJ_FPGA_HOME/image
+PROJ_FPGA_IMPL=$PROJ_FPGA_HOME/impl
+PROJ_FPGA_XDC=$PROJ_FPGA_HOME/xdc
 
-LIB_ROOT=$WS_ROOT/lib
+LIB_ROOT=$BLOG_ROOT/lib
 
 export PROJ
 export PROJ_ROOT
@@ -155,9 +164,13 @@ export PROJ_HDL_IP
 export PROJ_FPGA_INC
 export PROJ_FPGA_SIM
 export PROJ_FPGA_RTL
+export PROJ_FPGA_IP
+export PROJ_FPGA_BD
 export PROJ_FPGA_TB
 export PROJ_FPGA_TESTS
 export PROJ_FPGA_IMAGE
+export PROJ_FPGA_IMPL
+export PROJ_FPGA_XDC
 
 alias scsim="cd $PROJ_SC_SIM"
 alias scrtl="cd $PROJ_SC_RTL"
@@ -167,10 +180,15 @@ alias scinc="cd $PROJ_SC_INC"
 
 alias fpgasim="cd $PROJ_FPGA_SIM"
 alias fpgartl="cd $PROJ_FPGA_RTL"
+alias fpgaip="cd $PROJ_FPGA_IP"
+alias fpgabd="cd $PROJ_FPGA_BD"
 alias fpgatb="cd $PROJ_FPGA_TB"
+alias fpgaxdc="cd $PROJ_FPGA_XDC"
 alias fpgatests="cd $PROJ_FPGA_TESTS"
 alias fpgainc="cd $PROJ_FPGA_INC"
 alias fpgaimage="cd $PROJ_FPGA_IMAGE"
+alias fpgaimpl="cd $PROJ_FPGA_IMPL"
+alias fpgaxdc="cd $PROJ_FPGA_XDC"
 
 alias hdlsim="cd $PROJ_HDL_SIM"
 alias hdlrtl="cd $PROJ_HDL_RTL"

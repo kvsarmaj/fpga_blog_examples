@@ -1,0 +1,2 @@
+${PROJ_HDL_RTL}/clock_gate.v
+${PROJ_HDL_RTL}/clock_gating.v
